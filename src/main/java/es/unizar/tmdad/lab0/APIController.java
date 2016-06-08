@@ -1,8 +1,11 @@
 package es.unizar.tmdad.lab0;
 
 
+import io.jsonwebtoken.Claims;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,6 +14,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
+import java.util.List;
 
 @RestController
 public class APIController {
@@ -19,9 +23,30 @@ public class APIController {
 
 
     @CrossOrigin
-    @RequestMapping(value = "/books/{id}", method = { RequestMethod.GET })
-    public String getBook(@PathVariable("id") Integer id )  {
-        return sendGET(servidor+"/books/"+id);
+    @RequestMapping(value = "/books/{id}/role/{role}", method = { RequestMethod.GET })
+    public String getBook(@PathVariable("id") Integer id,@PathVariable final String role,
+                          final HttpServletRequest request) throws ServletException {
+
+        Usuarios pepe= new Usuarios();
+
+
+
+    try{
+        System.out.println("Loggin de  "+role);//funciona! devuelve
+        System.out.println("Respuesta  "+pepe.login(role));//funciona! devuelve
+        return sendGET(servidor + "/books/" + id);
+    }
+    catch (Exception e){
+        e.printStackTrace();
+        System.out.println("Invalido L3");
+        System.out.println("Retorno fail");
+        return "Fail";
+    }
+
+
+
+
+
     }
 
 
