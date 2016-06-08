@@ -21,8 +21,10 @@ public class APIController {
     @CrossOrigin
     @RequestMapping(value = "/books/{id}", method = { RequestMethod.GET })
     public String getBook(@PathVariable("id") Integer id )  {
-        return getTxtFromUrl(servidor+"/books/"+id);
+        return sendGET(servidor+"/books/"+id);
     }
+
+
     @CrossOrigin
     @RequestMapping(value = "/books/{id}", method = { RequestMethod.PUT })
     public String editBook(
@@ -32,6 +34,8 @@ public class APIController {
     )  {
         return getTxtFromUrl(servidor+"/books/"+id);
     }
+
+
     @CrossOrigin
     @RequestMapping(value = "/books/{id}", method = { RequestMethod.DELETE })
     public String deleteBook(@PathVariable("id") Integer id)  {
@@ -126,16 +130,16 @@ public class APIController {
     }
 
 
-        private static void sendPOST() throws IOException {
-            URL obj = new URL(POST_URL);
+        private static void sendPOST(String url) throws IOException {
+            URL obj = new URL(url);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
             con.setRequestMethod("POST");
-            con.setRequestProperty("User-Agent", USER_AGENT);
+            con.setRequestProperty("User-Agent", "Chrome/23.0.1271.95");
 
             // For POST only - START
             con.setDoOutput(true);
             OutputStream os = con.getOutputStream();
-            os.write(POST_PARAMS.getBytes());
+            //os.write(POST_PARAMS.getBytes());
             os.flush();
             os.close();
             // For POST only - END
