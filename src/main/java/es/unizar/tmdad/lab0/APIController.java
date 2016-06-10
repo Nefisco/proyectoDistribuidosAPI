@@ -19,13 +19,13 @@ import java.util.List;
 @RestController
 public class APIController {
 
-    String servidor= "https://books-analyzer.herokuapp.com/";
+    String servidor= "https://ws-books-analyzer.herokuapp.com/";
 
 
     @CrossOrigin
     @RequestMapping(value = "/books/{id}/role/{role}", method = { RequestMethod.GET })
-    public String getBook(@PathVariable("id") Integer id,@PathVariable final String role,
-                          final HttpServletRequest request) throws ServletException {
+    public String getBook(@PathVariable("id") String id,@PathVariable final String role)
+            throws ServletException {
 
         Usuarios pepe= new Usuarios();
 
@@ -51,21 +51,46 @@ public class APIController {
 
 
     @CrossOrigin
-    @RequestMapping(value = "/books/{id}", method = { RequestMethod.PUT })
+    @RequestMapping(value = "/books/{id}/role/{role}", method = { RequestMethod.PUT })
     public String editBook(
             @PathVariable("id") Integer id,
             @RequestBody(required=false) String title,
-            @RequestBody(required=false) String author
+            @RequestBody(required=false) String author,
+            @PathVariable final String role
     )  {
-        return getTxtFromUrl(servidor+"/books/"+id);
+        try{
+            Usuarios pepe= new Usuarios();
+            System.out.println("Loggin de  "+role);//funciona! devuelve
+            System.out.println("Respuesta  "+pepe.login(role));//funciona! devuelve
+            return sendGET(servidor + "/books/" + id);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Invalido L3");
+            System.out.println("Retorno fail");
+            return "Fail";
+        }
+
     }
 
 
     @CrossOrigin
-    @RequestMapping(value = "/books/{id}", method = { RequestMethod.DELETE })
-    public String deleteBook(@PathVariable("id") Integer id)  {
+    @RequestMapping(value = "/books/{id}/role/{role}", method = { RequestMethod.DELETE })
+    public String deleteBook(@PathVariable("id") Integer id,@PathVariable final String role)  {
 
-        return sendGET(servidor+"/books/"+id);
+        try{
+            Usuarios pepe= new Usuarios();
+            System.out.println("Loggin de  "+role);//funciona! devuelve
+            System.out.println("Respuesta  "+pepe.login(role));//funciona! devuelve
+            return sendGET(servidor + "/books/" + id);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Invalido L3");
+            System.out.println("Retorno fail");
+            return "Fail";
+        }
+
     }
 
 
@@ -74,7 +99,8 @@ public class APIController {
     public String createBook (
             @RequestParam(value = "title", required=false) String title,
             @RequestParam(value = "author", required=false) String author,
-            @RequestParam(value = "url", required=false) String url
+            @RequestParam(value = "url", required=false) String url,
+            @PathVariable final String role
     )  {
       //  return "forward:/"+servidor+"/books/"+id);
         return getTxtFromUrl(servidor+"/books/");
